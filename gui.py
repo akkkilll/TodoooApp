@@ -5,6 +5,8 @@ import PySimpleGUI as sg
 label = sg.Text("Task to add:")
 inputBox = sg.InputText(tooltip = "Enter task")
 
+print("Hello")
+
 addButton = sg.Button("Add")
 
 #Create Instance
