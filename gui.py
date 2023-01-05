@@ -2,8 +2,11 @@ from functions import getTodos, writeTodos
 import time
 import PySimpleGUI as sg
 
+sg.theme("DarkBlue")
+
+clock = sg.Text("", key="clock")
 label = sg.Text("Task to add:")
-inputBox = sg.InputText(tooltip = "Enter task", key='todo')
+inputBox = sg.InputText(tooltip = "Enter task", key='todo', size=[32,4])
 addButton = sg.Button("Add")
 
 listbox = sg.Listbox(values=getTodos(), key='existingtodo',
@@ -15,14 +18,16 @@ exitbutton = sg.Button("Exit")
 
 #Create Instance
 window = sg.Window('ToDooo App',
-    layout = [[label],
-     [inputBox, addButton],
-      [listbox, editButton, completebutton],
-       [exitbutton]],
+    layout = [[clock],
+     [label],
+      [inputBox, addButton],
+       [listbox, editButton, completebutton],
+        [exitbutton]],
     font=('Helvetica', 13))
 
 while True:
-    event, values = window.read()   #Displays the window and reads user input
+    event, values = window.read(timeout=200)   #Displays the window and reads user input
+    window["clock"].update(value=time.strftime("%b %d, %Y %H:%M:%S  -  ToDooo App"))
 
     match event:
         case "Add": 
@@ -32,25 +37,36 @@ while True:
             writeTodos(todos)
 
             window['existingtodo'].update(values=todos)
+            window['todo'].update(value="")
         
         case "Edit":
-            todos = getTodos()
-            newtodo = values['todo'] + "\n"
-            selectedtodo = values['existingtodo'][0]
+            try:
+                todos = getTodos()
+                newtodo = values['todo'] + "\n"
+                selectedtodo = values['existingtodo'][0]
 
-            index = todos.index(selectedtodo)
-            todos[index] = newtodo
-            writeTodos(todos)
+                index = todos.index(selectedtodo)
+                todos[index] = newtodo
+                writeTodos(todos)
 
-            window['existingtodo'].update(values=todos)
+                window['existingtodo'].update(values=todos)
+            
+            except IndexError:
+                sg.popup("Select a task for editing..", font=("Helvetica", 15))
+
 
         case "Complete":
-            completetodo = values['existingtodo'][0]
-            todos = getTodos()
-            todos.remove(completetodo)
-            writeTodos(todos)
-            window['existingtodo'].update(values=todos)
-            window['todo'].update(value="")
+            try:
+                completetodo = values['existingtodo'][0]
+                todos = getTodos()
+                todos.remove(completetodo)
+                writeTodos(todos)
+                window['existingtodo'].update(values=todos)
+                window['todo'].update(value="")
+
+            except IndexError:
+                sg.popup("Choose a task to mark as complete", font=("Helvetica", 15))
+
         
         case "existingtodo":
             window['todo'].update(value = values['existingtodo'][0])
