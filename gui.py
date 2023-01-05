@@ -7,13 +7,18 @@ inputBox = sg.InputText(tooltip = "Enter task", key='todo')
 addButton = sg.Button("Add")
 
 listbox = sg.Listbox(values=getTodos(), key='existingtodo',
- enable_events=True, size=[45,10])
+ enable_events=True, size=[30,10])
 
 editButton = sg.Button("Edit")
+completebutton = sg.Button("Complete")
+exitbutton = sg.Button("Exit")
 
 #Create Instance
 window = sg.Window('ToDooo App',
-    layout = [[label], [inputBox, addButton], [listbox, editButton]],
+    layout = [[label],
+     [inputBox, addButton],
+      [listbox, editButton, completebutton],
+       [exitbutton]],
     font=('Helvetica', 13))
 
 while True:
@@ -38,9 +43,20 @@ while True:
             writeTodos(todos)
 
             window['existingtodo'].update(values=todos)
+
+        case "Complete":
+            completetodo = values['existingtodo'][0]
+            todos = getTodos()
+            todos.remove(completetodo)
+            writeTodos(todos)
+            window['existingtodo'].update(values=todos)
+            window['todo'].update(value="")
         
         case "existingtodo":
             window['todo'].update(value = values['existingtodo'][0])
+        
+        case "Exit":
+            break
 
         case sg.WIN_CLOSED:
             break
