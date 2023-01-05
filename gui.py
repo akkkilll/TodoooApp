@@ -7,7 +7,7 @@ sg.theme("DarkBlue")
 clock = sg.Text("", key="clock")
 label = sg.Text("Task to add:")
 inputBox = sg.InputText(tooltip = "Enter task", key='todo', size=[32,4])
-addButton = sg.Button("Add")
+addButton = sg.Button("Add", mouseover_colors="LightBlue2")
 
 listbox = sg.Listbox(values=getTodos(), key='existingtodo',
  enable_events=True, size=[30,10])
