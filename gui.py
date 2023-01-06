@@ -1,6 +1,12 @@
 from functions import getTodos, writeTodos
 import time
 import PySimpleGUI as sg
+import os
+
+#Create todos.txt if not created already
+if not os.path.exists("todos.txt"):
+    with open("todos.txt", "w") as file:
+        pass
 
 sg.theme("DarkBlue")
 
